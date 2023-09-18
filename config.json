@@ -1,0 +1,25 @@
+{
+    "server": {
+        "host": "0.0.0.0",
+        "port": "8081"
+    },
+    "mongoDB": {
+        "user": "user",
+        "pass": "pass",
+        "hostname": "172.16.0.4",
+        "port": 27017,
+        "database": "BusSistem"
+    },
+    "Requester": {
+        "Urls": [
+            "https://test.uwave.sg/busLines",
+            "https://test.uwave.sg/busPositions"
+        ],
+        "timeWindowDefault": "2s",
+        "timeWindowsEachUrls": [
+            "30m",
+            "2s"
+        ]
+    }
+
+}
