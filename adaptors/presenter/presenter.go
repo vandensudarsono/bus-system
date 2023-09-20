@@ -3,7 +3,7 @@ package presenter
 import (
 	"context"
 
-	"github.com/vandensudarsono/bus-system/domain/models"
+	dto "github.com/vandensudarsono/bus-system/domain/DTO"
 	errorcode "github.com/vandensudarsono/bus-system/internal/errorCode"
 )
 
@@ -18,20 +18,20 @@ func (p *Presenter) Present(ctx context.Context, data, meta interface{}, err err
 	if err != nil {
 		switch err.Error() {
 		case errorcode.ErrNotFound.String():
-			return models.Response{
-				Status: models.Status{Code: errorcode.ErrNotFound, Message: errorcode.ErrNotFound.String()},
+			return dto.Response{
+				Status: dto.Status{Code: errorcode.ErrNotFound, Message: errorcode.ErrNotFound.String()},
 			}, 200
 		default:
-			return models.Response{
-				Status: models.Status{Code: errorcode.ErrUnknown, Message: errorcode.ErrUnknown.String()},
+			return dto.Response{
+				Status: dto.Status{Code: errorcode.ErrUnknown, Message: errorcode.ErrUnknown.String()},
 			}, 200
 		}
 	}
 
-	return models.Response{
+	return dto.Response{
 		Data: data,
 		Meta: meta,
-		Status: models.Status{
+		Status: dto.Status{
 			Code:    0,
 			Message: "success",
 		},

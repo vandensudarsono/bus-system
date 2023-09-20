@@ -1,4 +1,6 @@
-package models
+package dto
+
+import "github.com/vandensudarsono/bus-system/domain/models"
 
 type PostitionsDTOResponse struct {
 	Payload []BusPosition `json:"payload"`
@@ -6,6 +8,6 @@ type PostitionsDTOResponse struct {
 }
 
 type BusAvailableDTOResponse struct {
-	Payload []BusLine `json:"payload"`
-	Status  int       `json:"status"`
+	Payload []models.BusLine `json:"payload"`
+	Status  int              `json:"status"`
 }

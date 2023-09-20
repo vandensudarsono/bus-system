@@ -1,0 +1,33 @@
+{
+    "payload": [
+        {
+            "bearing": 158.4,
+            "crowdLevel": "medium",
+            "lat": 1.343913,
+            "lng": 103.679,
+            "vehiclePlate": "PD933Y"
+        },
+        {
+            "bearing": 57.2,
+            "crowdLevel": "low",
+            "lat": 1.343758,
+            "lng": 103.686936,
+            "vehiclePlate": "PD524U"
+        },
+        {
+            "bearing": 167.7,
+            "crowdLevel": "high",
+            "lat": 1.348855,
+            "lng": 103.682048,
+            "vehiclePlate": "PD742G"
+        },
+        {
+            "bearing": 45.6,
+            "crowdLevel": "low",
+            "lat": 1.356772,
+            "lng": 103.687616,
+            "vehiclePlate": "PD583Z"
+        }
+    ],
+    "status": 1000000
+}

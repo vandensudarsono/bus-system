@@ -13,14 +13,18 @@ var y *mongo.Client
 
 func InitDataStore(user, password, host string, port int) error {
 	var err error
-	fmt.Println(user, password, host, port)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	urlString := fmt.Sprintf("mongodb://%s:%s@%s:%d/", user, password, host, port)
-	fmt.Println(urlString)
 	y, err = mongo.Connect(ctx, options.Client().ApplyURI(urlString))
 	if err != nil {
+		return err
+	}
+
+	err = y.Ping(ctx, nil)
+	if err != nil {
+		fmt.Println("Error connecting to MongoDB:", err)
 		return err
 	}
 

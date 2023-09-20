@@ -9,7 +9,9 @@ type InputPort interface {
 	//GetBuslinesInBusStop(ctx context.Context, busStopID string) (interface{}, int)
 	// GetBuslinesAvailable: get all buslines available at this time
 	GetBuslinesAvailable(ctx context.Context, offset, limit int64) (interface{}, int)
-	//GetADetailBusline(ctx context.Context, buslineId string) (interface{}, error)
+	GetBuslineDetailById(ctx context.Context, busLineID string) (interface{}, int)
+	GetBuslinesByBusStopName(ctx context.Context, busStopName string) (interface{}, int)
+	GetBuslinesByBusStopId(ctx context.Context, busStopID string) (interface{}, int)
 }
 
 type OutputPort interface {

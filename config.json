@@ -6,12 +6,12 @@
     "mongoDB": {
         "user": "user",
         "pass": "pass",
-        "hostname": "172.16.0.4",
+        "hostname": "172.19.0.3",
         "port": 27017,
         "database": "BusSistem"
     },
-    "Requester": {
-        "Urls": [
+    "requester": {
+        "urls": [
             "https://test.uwave.sg/busLines",
             "https://test.uwave.sg/busPositions"
         ],

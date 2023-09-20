@@ -33,7 +33,7 @@ func TestNewMongoImpl(t *testing.T) {
 }
 
 func TestGetBuslines(t *testing.T) {
-	config.LoadConfig()
+	config.LoadConfig("../../.")
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://user:pass@172.19.0.4:27017/BusSistem"))

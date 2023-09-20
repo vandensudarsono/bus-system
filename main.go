@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	config.LoadConfig()
+	config.LoadConfig(".")
 	err := mongodb.InitDataStore(
 		viper.GetString("mongoDB.user"),
 		viper.GetString("mongoDB.pass"),
@@ -36,8 +36,16 @@ func main() {
 	c := controllers.NewBusLinesController(uc)
 
 	App := fiber.New()
-	App.Get("/api/get-available-bus", c.GetAvailableLines)
+	//create group api
+	api := App.Group("/api")
 
+	//create route api
+	api.Get("/get-available-bus", c.GetAvailableLines)
+	api.Get("/get-busline-detail", c.GetBuslineDetailById)
+	api.Get("/get-busline-by-busstop-name", c.GetBuslineByBusStopName)
+	api.Get("/get-busline-detail-by-busstop-id", c.GetBuslinesDetailByBusStopId)
+
+	//api listen to given addres and port
 	err = App.Listen(fmt.Sprintf("%s:%s", viper.GetString("server.host"), viper.GetString("server.port")))
 	if err != nil {
 		fmt.Println(err)

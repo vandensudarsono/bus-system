@@ -27,11 +27,10 @@ func (m *MongoImpl) GetBuslines(ctx context.Context, offset, limit int64) []mode
 	)
 
 	cur, err = m.client.Database(viper.GetString("mongoDB.database")).
-		//cur, err = m.client.Database(viper.GetString("BusSistem")).
 		Collection("available-bus").Find(
-		ctx, bson.D{}, options.Find().SetAllowDiskUse(true).
-			SetLimit(limit).SetSkip(offset).SetProjection(bson.M{"_id": 0}))
+		ctx, bson.M{}, options.Find().SetLimit(limit).SetSkip(offset).SetProjection(bson.M{"_id": 0}))
 
+	fmt.Println("error at get available bus lines: ", err)
 	if err == nil {
 		err = cur.All(ctx, &result)
 		fmt.Println("error cursor at get bus lines: ", err)
@@ -48,7 +47,7 @@ func (m *MongoImpl) GetBuslineById(ctx context.Context, busLineID string) models
 	)
 
 	err = m.client.Database(viper.GetString("mongoDB.database")).
-		Collection("available-bus").FindOne(ctx, bson.M{"busStops.id": busLineID},
+		Collection("available-bus").FindOne(ctx, bson.M{"id": busLineID},
 		options.FindOne().SetProjection(bson.M{"_id": 0})).Decode(&result)
 
 	if err != nil {
@@ -56,6 +55,27 @@ func (m *MongoImpl) GetBuslineById(ctx context.Context, busLineID string) models
 	}
 
 	return result
+}
+
+func (m *MongoImpl) GetBuslineByBusStopId(ctx context.Context, busStopID string) ([]models.BusLine, error) {
+	var (
+		result []models.BusLine
+		err    error
+		cur    *mongo.Cursor
+	)
+
+	cur, err = m.client.Database(viper.GetString("mongoDB.database")).
+		Collection("available-bus").Find(ctx, bson.M{"busStops.id": busStopID},
+		options.Find().SetProjection(bson.M{"_id": 0}))
+
+	fmt.Println("error at get available bus lines by bus stop id: ", err)
+	if err == nil {
+		err = cur.All(ctx, &result)
+		fmt.Println("error cursor at get bus lines by bus stop id: ", err)
+		defer cur.Close(ctx)
+	}
+
+	return result, err
 }
 
 func (m *MongoImpl) InsertBusLine(ctx context.Context, input []models.BusLine) bool {
@@ -115,6 +135,29 @@ func (m *MongoImpl) GetBusStops(ctx context.Context, limit, offset int64) []mode
 
 	err = cur.All(ctx, &result)
 	fmt.Println("error cursor at get bus stops: ", err)
+	defer cur.Close(ctx)
+
+	return result
+}
+
+func (m *MongoImpl) GetBuslineByBusStopName(ctx context.Context, name string, offset, limit int64) []models.BusLine {
+	var result []models.BusLine
+
+	if name == "" {
+		return result
+	}
+
+	cur, err := m.client.Database(viper.GetString("mongoDB.database")).
+		Collection("available-bus").Find(ctx, bson.M{"busStops.name": bson.M{"$regex": name, "$options": "i"}},
+		options.Find().SetAllowDiskUse(true).SetLimit(limit).SetSkip(offset).SetProjection(bson.M{"_id": 0}))
+
+	if err != nil {
+		fmt.Println("error at get bus stops: ", err)
+		return result
+	}
+
+	err = cur.All(ctx, &result)
+	fmt.Println("error cursor at get bus lines by bus stop name: ", err)
 	defer cur.Close(ctx)
 
 	return result
