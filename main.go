@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
+	requesterImpl "github.com/vandensudarsono/bus-system/adaptors/clients"
 	"github.com/vandensudarsono/bus-system/adaptors/controllers"
 	"github.com/vandensudarsono/bus-system/adaptors/presenter"
 	repositoryimpl "github.com/vandensudarsono/bus-system/adaptors/repositoryImpl"
@@ -28,16 +29,20 @@ func main() {
 		os.Exit(1)
 	}
 
-	//service interactor
-	md := repositoryimpl.NewMongoImpl(mongodb.GetDataStoreClient())
-	//presenter
-	p := presenter.NewPresenter()
-	uc := usecase.NewBusInteractor(md, p)
-	c := controllers.NewBusLinesController(uc)
-
 	App := fiber.New()
 	//create group api
 	api := App.Group("/api")
+
+	//repository
+	md := repositoryimpl.NewMongoImpl(mongodb.GetDataStoreClient())
+	//presenter
+	p := presenter.NewPresenter()
+	//client
+	cl := requesterImpl.NewClients(&fiber.Client{})
+	//usecase
+	uc := usecase.NewBusInteractor(md, cl, p)
+	//controller
+	c := controllers.NewBusLinesController(uc)
 
 	//create route api
 	api.Get("/get-available-bus", c.GetAvailableLines)

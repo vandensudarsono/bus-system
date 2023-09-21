@@ -1,4 +1,4 @@
-package clients
+package requesterImpl
 
 import (
 	"context"
@@ -28,4 +28,20 @@ func TestGetRunningBusInABusLines(t *testing.T) {
 		assert.Equal(t, err, nil)
 	})
 
+}
+
+func TestGetAvailableBuslines(t *testing.T) {
+	config.LoadConfig("../../.")
+	client := fiber.AcquireClient()
+
+	req := NewClients(client)
+
+	t.Run("testing available lines", func(t *testing.T) {
+		result, err := req.GetAvailableBuslines(context.TODO())
+		if err != nil {
+			log.Fatalf("error %+v", err)
+		}
+
+		assert.Equal(t, len(result), 4)
+	})
 }

@@ -1,4 +1,4 @@
-package clients
+package requesterImpl
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
 	dto "github.com/vandensudarsono/bus-system/domain/DTO"
+	"github.com/vandensudarsono/bus-system/domain/models"
 )
 
 type Clients struct {
@@ -55,4 +56,40 @@ func (cl *Clients) GetRunningBusInABusLines(ctx context.Context, busLineID strin
 
 	return result, err
 
+}
+
+func (cl *Clients) GetAvailableBuslines(ctx context.Context) ([]models.BusLine, error) {
+	var (
+		result []models.BusLine
+		uWave  dto.BusAvailableDTOResponse
+		err    error
+	)
+
+	url := viper.GetStringSlice("requester.urls")[0]
+
+	agent := fiber.AcquireAgent()
+
+	request := agent.Request()
+	request.SetRequestURI(url)
+	request.Header.SetMethod(fiber.MethodGet)
+
+	if err = agent.Parse(); err != nil {
+		return result, err
+	}
+
+	response := fiber.AcquireResponse()
+
+	err = agent.DoDeadline(request, response, time.Now().Add(time.Minute))
+	if err != nil {
+		return result, err
+	}
+
+	err = json.Unmarshal(response.Body(), &uWave)
+	if err != nil {
+		return result, err
+	}
+
+	result = append(result, uWave.Payload...)
+
+	return result, err
 }

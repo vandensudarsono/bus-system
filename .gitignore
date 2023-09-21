@@ -22,3 +22,6 @@ go.work
 vendor
 .vscode
 
+# binary file
+bus-system
+

@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/vandensudarsono/bus-system/adaptors/clients"
 	dto "github.com/vandensudarsono/bus-system/domain/DTO"
+	"github.com/vandensudarsono/bus-system/domain/clients"
 	"github.com/vandensudarsono/bus-system/domain/models"
 	"github.com/vandensudarsono/bus-system/domain/repository"
 	errorcode "github.com/vandensudarsono/bus-system/internal/errorCode"
@@ -21,10 +21,11 @@ type BusInteractor struct {
 	out    OutputPort
 }
 
-func NewBusInteractor(repo repository.RepositoryDB, out OutputPort) *BusInteractor {
+func NewBusInteractor(repo repository.RepositoryDB, cl clients.Clients, out OutputPort) *BusInteractor {
 	return &BusInteractor{
-		repo: repo,
-		out:  out,
+		repo:   repo,
+		client: cl,
+		out:    out,
 	}
 }
 
@@ -56,11 +57,6 @@ func (bi *BusInteractor) GetBuslinesByBusStopId(ctx context.Context, busStopID s
 	var response dto.BuslinesByBusStopID
 
 	type (
-		// busLineWithVehiclesMutex struct {
-		// 	sync.Mutex
-		// 	blwv map[string][]dto.BuslineWithVehichles
-		// }
-
 		availableVehiclesMutex struct {
 			sync.Mutex
 			av map[string][]dto.BusPositionWithTime
@@ -80,9 +76,10 @@ func (bi *BusInteractor) GetBuslinesByBusStopId(ctx context.Context, busStopID s
 
 	var (
 		wg, wg2 sync.WaitGroup
-		//blwv    busLineWithVehiclesMutex
-		av availableVehiclesMutex
+		av      availableVehiclesMutex
 	)
+
+	av.av = map[string][]dto.BusPositionWithTime{}
 
 	//request all available buses in those buslines result
 	for i := 0; i < len(result); i++ {
@@ -165,36 +162,6 @@ func (bi *BusInteractor) GetBuslinesByBusStopName(ctx context.Context, busStopNa
 	if lenResult == 0 {
 		return bi.out.Present(ctx, nil, nil, fmt.Errorf(errorcode.ErrNotFound.String()))
 	}
-
-	//request all available buses in those buslines result
-	// for i := 0; i < lenResult; i++ {
-	// 	wg.Add(1)
-
-	// 	go func(busLine models.BusLine) {
-	// 		defer wg.Done()
-
-	// 		busPositions, err := bi.client.GetRunningBusInABusLines(ctx, busLine.Id)
-	// 		if err != nil || len(busPositions) == 0 {
-
-	// 		} else {
-	// 			for j := 0; j < len(busPositions); j++ {
-	// 				wg2.Add(1)
-	// 				go func(bp models.BusPosition) {
-	// 					geospacial.CountTimeRemaining(
-	// 						[]float64{float64(bp.Lat), float64(bp.Lng)},
-	// 						[]float64{}
-	// 					)
-	// 				}(busPositions[j])
-	// 			}
-
-	// 		}
-
-	// 	}(result[i])
-
-	// }
-
-	// //wait all result
-	// wg.Done()
 
 	return bi.out.Present(ctx, result, nil, nil)
 

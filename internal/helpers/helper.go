@@ -8,7 +8,6 @@ func GetLatitudeAndLongitudeOfABusStopID(busStopID string, busStops []models.Bus
 	for i := 0; i < len(busStops); i++ {
 		if busStops[i].Id == busStopID {
 			busStop = busStops[i]
-			// latLon = append(latLon, busStops[i].Lat, busStops[i].Lng)
 			break
 		}
 	}
