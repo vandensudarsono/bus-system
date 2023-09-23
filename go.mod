@@ -5,6 +5,7 @@ go 1.21.1
 require (
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gofiber/fiber/v2 v2.49.2
+	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.3
 	go.mongodb.org/mongo-driver v1.12.1
@@ -16,6 +17,7 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
