@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/vandensudarsono/bus-system/cmd"
-	_ "github.com/vandensudarsono/bus-system/swagger"
+	//_ "github.com/vandensudarsono/bus-system/swagger"
 )
 
 // @title Bus Line Sample API
