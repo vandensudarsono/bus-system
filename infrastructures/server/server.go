@@ -10,6 +10,7 @@ import (
 	"github.com/vandensudarsono/bus-system/adaptors/presenter"
 	repositoryimpl "github.com/vandensudarsono/bus-system/adaptors/repositoryImpl"
 	mongodb "github.com/vandensudarsono/bus-system/infrastructures/mongoDB"
+	"github.com/vandensudarsono/bus-system/infrastructures/server/middlewares"
 	handlers "github.com/vandensudarsono/bus-system/infrastructures/server/routers/v1"
 	"github.com/vandensudarsono/bus-system/usecase"
 )
@@ -41,10 +42,10 @@ func NewServer() {
 	//controller
 	c := controllers.NewBusLinesController(uc)
 
+	//add middleware
+	middlewares.SetupMiddleware(S)
 	//add router
 	handlers.SetupBuslineHandler(S, c)
-
-	//add middleware
 
 }
 
