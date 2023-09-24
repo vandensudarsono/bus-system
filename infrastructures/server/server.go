@@ -44,6 +44,7 @@ func NewServer() {
 
 	//add middleware
 	middlewares.SetupMiddleware(S)
+	middlewares.SetupSwagger(S)
 	//add router
 	handlers.SetupBuslineHandler(S, c)
 

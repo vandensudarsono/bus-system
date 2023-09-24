@@ -11,6 +11,6 @@ func SetupBuslineHandler(app *fiber.App, h BuslineHandlers) {
 	buslines := v1.Group("/buslines")
 	buslines.Get("/get-buslines", h.GetAvailableLines)
 	buslines.Get("/details", h.GetBuslineDetailById)
-	buslines.Get("/by-busstopn-name", h.GetBuslineByBusStopName)
+	buslines.Get("/by-busstop-name", h.GetBuslineByBusStopName)
 	buslines.Get("/by-busstop-id", h.GetBuslinesDetailByBusStopId)
 }
